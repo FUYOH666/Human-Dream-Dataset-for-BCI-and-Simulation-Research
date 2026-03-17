@@ -132,6 +132,8 @@ The full dream dataset is not published here for privacy. But we invite contribu
 
 If you have interesting ideas, books, or frameworks that could yield novel interpretations of dream content, we can integrate them. The goal: explore how different knowledge bases (e.g. Jung, neuroscience, simulation hypothesis) reframe the same recorded dreams.
 
+**Recommended books:** [docs/RECOMMENDED_BOOKS.md](docs/RECOMMENDED_BOOKS.md) — 10 ideas for indexing (Jung, Hobson, Walker, Metzinger, Bostrom, Dick, etc.).
+
 Contact: [GitHub @iamfuyoh](https://github.com/iamfuyoh)
 
 ## Repository Structure
@@ -153,7 +155,8 @@ Contact: [GitHub @iamfuyoh](https://github.com/iamfuyoh)
 │   └── raw_examples/         # Anonymized dream samples
 ├── docs/
 │   ├── HYPOTHESIS.md         # Research hypothesis & theoretical framework
-│   └── RECORDING_GUIDE.md   # Practical dream capture tips
+│   ├── RECORDING_GUIDE.md   # Practical dream capture tips
+│   └── RECOMMENDED_BOOKS.md # Book ideas for interpretation experiment
 ├── analysis/
 │   └── dream_analyzer.py    # Text → existential questions
 ├── tests/
