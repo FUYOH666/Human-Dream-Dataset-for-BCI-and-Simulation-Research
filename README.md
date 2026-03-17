@@ -1,7 +1,8 @@
 # Human Dream Dataset: Metabolic Modulation of Consciousness & Simulation-Like Patterns
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/FUYOH666/Human-Dream-Dataset-for-BCI-and-Simulation-Research)
+[![License](https://img.shields.io/badge/license-MIT-blue)](https://opensource.org/licenses/MIT)
+[![Python](https://img.shields.io/badge/python-3.12+-blue)](https://www.python.org/)
+[![Last Updated](https://img.shields.io/github/last-commit/FUYOH666/Human-Dream-Dataset-for-BCI-and-Simulation-Research)](https://github.com/FUYOH666/Human-Dream-Dataset-for-BCI-and-Simulation-Research)
 
 **Self-experiment by independent researcher (34 y.o., 9 months of daily dream recall training)**
 
@@ -68,6 +69,8 @@ Full elaboration: [docs/HYPOTHESIS.md](docs/HYPOTHESIS.md)
 - Metabolic pathway to enhance cognition and access altered states (without implant yet).
 
 ## How to Use This Dataset
+
+**Directly relevant for Neuralink (BCI Applications) and xAI (Grok Companions / Applied Inference)** — ready human ground-truth for sleep-state decoding and simulation research.
 
 - **BCI / consciousness researchers:** May be useful for sleep-state decoding, cognition enhancement, or internal-state calibration. Open to collaboration.
 - **Analysis script:** Run `python analysis/dream_analyzer.py <dream_text_file>` to extract existential questions from dream narratives.
