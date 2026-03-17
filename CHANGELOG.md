@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.1] - 2026-03-17
+
+### Fixed
+
+- Long messages: split transcript and analysis into chunks under Telegram 4096 limit
+- ASR timeout 600s, LLM timeout 180s for voice up to ~10 min
+- Add `test_split_message_under_telegram_limit`
+
 ## [0.1.0] - 2026-03-17
 
 ### Added
