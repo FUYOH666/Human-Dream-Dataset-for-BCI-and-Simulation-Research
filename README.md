@@ -1,6 +1,7 @@
 # Human Dream Dataset: Metabolic Modulation of Consciousness & Simulation-Like Patterns
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/FUYOH666/Human-Dream-Dataset-for-BCI-and-Simulation-Research)
 
 **Self-experiment by independent researcher (34 y.o., 9 months of daily dream recall training)**
 

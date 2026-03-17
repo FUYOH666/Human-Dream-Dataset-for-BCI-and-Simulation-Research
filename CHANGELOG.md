@@ -16,3 +16,4 @@
 - `dream_analyzer.py`: keyword-based extraction of existential questions from dream text
 - MIT License
 - GitHub Actions workflow for auto-updating "Last updated" in README
+- Public GitHub repository: https://github.com/FUYOH666/Human-Dream-Dataset-for-BCI-and-Simulation-Research
