@@ -4,10 +4,13 @@ import logging
 from pathlib import Path
 
 from telegram import Update
+from telegram.constants import ChatAction, MessageLimit
 from telegram.ext import ContextTypes, MessageHandler, CommandHandler
-from telegram.constants import ChatAction
 
 from bot.config import get_settings
+
+# Telegram message limit (4096); use 4000 to stay safe
+MAX_MESSAGE_LENGTH = min(4000, MessageLimit.MAX_TEXT_LENGTH - 96)
 from bot.services.asr import transcribe as asr_transcribe
 from bot.services.llm import analyze_dream as llm_analyze
 from bot.services.analyzer import analyze_dream_keywords
@@ -33,6 +36,40 @@ Place · Events · Participants · patterns · existential questions
 def _load_system_prompt() -> str:
     """Load dream analysis system prompt."""
     return PROMPT_PATH.read_text(encoding="utf-8")
+
+
+def _split_message(text: str, max_len: int = MAX_MESSAGE_LENGTH) -> list[str]:
+    """Split text into chunks under max_len, breaking at newlines when possible."""
+    if len(text) <= max_len:
+        return [text] if text else []
+    chunks: list[str] = []
+    while text:
+        if len(text) <= max_len:
+            chunks.append(text)
+            break
+        chunk = text[:max_len]
+        last_newline = chunk.rfind("\n")
+        if last_newline > max_len // 2:
+            chunk = chunk[: last_newline + 1]
+            text = text[last_newline + 1 :]
+        else:
+            text = text[max_len:]
+        chunks.append(chunk)
+    return chunks
+
+
+async def _send_chunks(update: Update, text: str) -> None:
+    """Send text in chunks under Telegram limit. No parse_mode (LLM output is unpredictable)."""
+    for chunk in _split_message(text):
+        # Safety: Telegram limit 4096
+        if len(chunk) > 4096:
+            chunk = chunk[:4096]
+        await update.message.reply_text(chunk)
+
+
+async def _send_analysis(update: Update, analysis: str) -> None:
+    """Send analysis as plain text, splitting if too long."""
+    await _send_chunks(update, analysis)
 
 
 async def _send_start(update: Update) -> None:
@@ -89,9 +126,8 @@ async def handle_voice(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         )
         return
 
-    # Truncate for display if very long
-    transcript_preview = transcript[:500] + "..." if len(transcript) > 500 else transcript
-    await update.message.reply_text(f"Transcript:\n\n{transcript_preview}")
+    # Send full transcript in chunks (voice can be up to ~10 min)
+    await _send_chunks(update, f"Transcript:\n\n{transcript}")
 
     # Analyze
     await update.message.chat.send_action(ChatAction.TYPING)
@@ -108,16 +144,10 @@ async def handle_voice(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     )
 
     if analysis:
-        try:
-            await update.message.reply_text(analysis, parse_mode="Markdown")
-        except Exception as e:
-            logger.warning("Markdown parse failed, sending plain: %s", e)
-            await update.message.reply_text(analysis)
+        await _send_analysis(update, analysis)
     else:
         fallback = analyze_dream_keywords(transcript)
-        await update.message.reply_text(
-            fallback + "\n\n(LLM unavailable, used keyword analysis)"
-        )
+        await _send_analysis(update, fallback + "\n\n(LLM unavailable, used keyword analysis)")
 
 
 async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -144,13 +174,7 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     )
 
     if analysis:
-        try:
-            await update.message.reply_text(analysis, parse_mode="Markdown")
-        except Exception as e:
-            logger.warning("Markdown parse failed, sending plain: %s", e)
-            await update.message.reply_text(analysis)
+        await _send_analysis(update, analysis)
     else:
         fallback = analyze_dream_keywords(text)
-        await update.message.reply_text(
-            fallback + "\n\n(LLM unavailable, used keyword analysis)"
-        )
+        await _send_analysis(update, fallback + "\n\n(LLM unavailable, used keyword analysis)")

@@ -21,8 +21,8 @@ class Settings(BaseSettings):
     TELEGRAM_BOT_TOKEN: str
     LOCAL_AI_ASR_BASE_URL: str = "http://localhost:8001"
     LOCAL_AI_LLM_BASE_URL: str = "http://localhost:8005"
-    LOCAL_AI_ASR_TIMEOUT: int = 60
-    LOCAL_AI_LLM_TIMEOUT: int = 60
+    LOCAL_AI_ASR_TIMEOUT: int = 600  # 10 min for long voice (up to ~10 min audio)
+    LOCAL_AI_LLM_TIMEOUT: int = 180  # 3 min for long transcript analysis
 
     OPENROUTER_API_KEY: str | None = None
     OPENROUTER_MODEL: str = "openai/gpt-4o-mini"

@@ -2,6 +2,7 @@
 
 import pytest
 
+from bot.handlers import _split_message
 from bot.services.analyzer import analyze_dream_keywords
 
 
@@ -19,3 +20,12 @@ def test_analyzer_keywords_fallback_for_generic_text() -> None:
     result = analyze_dream_keywords(text)
     assert "Existential questions" in result
     assert "systemic constraint" in result or "dreamer" in result
+
+
+def test_split_message_under_telegram_limit() -> None:
+    """All chunks are under Telegram 4096 limit."""
+    long_text = "a" * 10000
+    chunks = _split_message(long_text)
+    assert len(chunks) >= 2
+    for chunk in chunks:
+        assert len(chunk) <= 4096, f"Chunk too long: {len(chunk)}"
